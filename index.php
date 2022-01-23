@@ -1,4 +1,4 @@
-"<html>
+<html>
     <head >
     <link rel="icon" href="images/happy.jpg">
         <div class ="head">
@@ -46,97 +46,133 @@
     <card.grid="2"><img src="images/happy.jpg" class="image"></card>
 </div >
 <div class="menus"><ul>
-        <a href="webdesign.php" style="position: absolute;left: 10px;top: 8%;text-decoration: none;color: black;">HOME</a>
-    </ul><ul><a href="webdesign.php" style="position: absolute;left: 600px;top: 8%;text-decoration: none; color: black;"> ABOUT US</a>
-    </ul><ul><a href="webdesign.php"style="position: absolute;left: 1200px;top: 8%;text-decoration: none;color:black">CONTACT</a></ul>
-        </div>
-        <center>
-        <form method="POST" class="post">
+<table width="50%" cellspacing="40" border="0">
+<tr>
+    <td><a href="index.php">Home</a></td>
+    <td><a href="create.php">Insert new word</a> </td>
+</td>
+      
+  </tr>
+  </table>
+<p>
+    </div>
+        <div class="card" align="center" >
+    
+        <h2 class="title">
+            translate
+        </h2>
+        
 
-        <table border="2" bgcolor="powderblue">
-            <tr bgcolor="lightgray"width="100" height="100" ><td>
-                <input type="submit" name="ikinyarw"  value="kinyarwanda">
-                <input type="submit" name="kiswhl"  value="kiswahili">
-                <input type="submit" name="french"  value="francais">
-                <input type="submit" name="anglais"  value="English"></td>
+        <hr class="line">
+        <div class="content">
+            <form method="post">
+
+            <!-- <label class="label_class">choose word</label>
+            <select name="word">
+                <option>word</option>
+            </select>
+            <label for=""></label> -->
+            <table border="0">
+                
+                <tr>
+                    <td>
+                        <h3 class="label__class">Word: </h3>
+                    </td>
+                    <td>
+                        <h3>
+                            <select name="word" class="label__class">
+                            <option value="0">Word</option>
+                            <?php
+                            require_once "connect.php";
+                            $result=[" "];
+                            $query_select_words=$connect->query("SELECT id,variable FROM language");
+                            while($row_words=$query_select_words->fetch_array())
+                            {
+                                $var_id = $row_words['id'];
+                                $var_word = $row_words['variable'];
+                                ?>
+                                <option value="<?=$var_id;?>"><?=$var_word;?></option>
+                                
+                                <?php
+
+                            }
+                            
+                            ?>
+                        </select></h3>
+                    </td>
                 </tr>
                 <tr>
                     <td>
-                        kugenda
-                       <center><h1> <?php
-                        include("connection.php");
-                        if (isset($_POST['ikinyarw'])) {
-                            $query = 'SELECT ikinyarwanda FROM db_table';
-                            $data = mysqli_query($conn, $query) ;
-            
-                            if (!$data) {
-                                echo("Error description:" . mysqli_error($mysqli));
-                            } else {
-            
-                                while ($row = mysqli_fetch_array($data)) {
-                                    echo  $row['ikinyarwanda'];
-                                 }
-                             }
-                            }
-                             elseif (isset($_POST['kiswhl'])) {
-                                $query = 'SELECT kiswahili FROM db_table';
-                                $data = mysqli_query($conn, $query) ;
-                
-                                if (!$data) {
-                                    echo("Error description:" . mysqli_error($mysqli));
-                                } else {
-                
-                                    while ($row = mysqli_fetch_array($data)) {
-                                        echo  $row['kiswahili'];
-                                     }
-                                 }
-                                }
-                                if (isset($_POST['french'])) {
-                                    $query = 'SELECT francais FROM db_table';
-                                    $data = mysqli_query($conn, $query) ;
-                    
-                                    if (!$data) {
-                                        echo("Error description:" . mysqli_error($mysqli));
-                                    } else {
-                    
-                                        while ($row = mysqli_fetch_array($data)) {
-                                            echo  $row['francais'];
-                                         }
-                                     }
-                                    }
-                                    if (isset($_POST['anglais'])) {
-                                        $query = 'SELECT english FROM db_table';
-                                        $data = mysqli_query($conn, $query) ;
-                        
-                                        if (!$data) {
-                                            echo("Error description:" . mysqli_error($mysqli));
-                                        } else {
-                        
-                                            while ($row = mysqli_fetch_array($data)) {
-                                                echo  $row['english'];
-                                             }
-                                         }
-                                        }
-                        
-                        ?></h1></center>
+                    <h3 class="label__class">Language: </h3>
 
                     </td>
+                    <td>
+                        <h3><select name="language" class="label__class">
+                            <option value="0">Languages</option>
+                            <option value="1">ikinyarwanda</option>
+                            <option value="2">kiswahili</option>
+                            <option value="3">francais</option>
+                            <option value="4">english</option>
+                        </select></h3>
+                    </td>
                 </tr>
-                </table>
-                                </form></center>
-                                    </div>
-                                    <nav>
-            <div class="contact"><section>
-                <h1>  <Location> NYARUGENGE/KIGALI/RWANDA</h1>
-            <footer style="background-color:powderblued ; height:80%;width:100%;">
-                <br><img src="images/phone.png" >phone number : 0789331230/ 0729787034</br>
-                <br><img src="images/whatsap.png" >whatapp : 0789331230</br>
-                <br><img src="images/email.png" >e-mail: yvonnemahoro2018@gmail.com</br>
+                <tr>
+                    <td colspan="2" align="center">
+                        <button type="submit" name="translate">translate</button>
+                    </td>
+                </tr>
+                <?php
+                if(isset($_POST['translate']))
+                {
+                    $language=$_POST['language'];
+                    $word= $_POST['word'];
+                    if(($word == 0) || ($language == 0))
+                    {
+                        $result[0]="choose valid word and valid language";
+                    }
+             
+                    $query= "SELECT * FROM language WHERE id= '$word'";
+                    $connect_query=$connect->query($query);
+                    $data = $connect_query->fetch_array();
 
-                </div>
-                </footer>
-            </section>
+                    if($language == 1)
+                    {
+                            $result[0] = $data['ikinyarwanda'];
+                    }
+                    elseif($language == 2)
+                    {
+                        $result[0]=$data['kiswahili'];
+                    }
+                    elseif($language == 3)
+                    {
+                        $result[0]=$data['francais'];
+                    }
+                    elseif($language == 4)
+                    {
+                     
+                        $result[0] = $data['english'];
+                    }
+                    else{
+                        $result[0] = "translation not found";
+                    }
+                }
+                ?>
+                <tr>
 
-s
+
+
+                   <td colspan="2">
+                  
+                       <h3 class="label__class">Translation:<?=$result[0];?></h3>
+                
+                   </td>
+                </tr>
+               
+     
+            </table>
+
+            </form>
+        </div>
+        </div>
     </body>
 </html>
